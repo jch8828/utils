@@ -116,8 +116,3 @@ function collapse_pwd {
     #echo ${PWD/#$HOME/~}
     echo $(pwd | sed -e "s,^$HOME,~,")
 }
-export PATH=~/instantclient_11_2:$PATH
-export PG_USER=root
-export PG_PASSWORD=
-export AWS_ACCESS_KEY=AKIAI52NRMVJOVCLISFA
-export AWS_SECRET_KEY=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
