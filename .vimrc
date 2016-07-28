@@ -1,3 +1,4 @@
+" copy from http://sam-koblenski.blogspot.com/2016/05/learn-vim-fast-useful-plug-ins.html
 set nocompatible
 filetype off
 
