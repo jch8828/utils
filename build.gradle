@@ -23,8 +23,6 @@ ext {
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
     maven {
         url "s3://shs-maven-new/releases"
         credentials(AwsCredentials) {
@@ -39,6 +37,8 @@ repositories {
             secretKey aws_secret_key
         }
     }
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
