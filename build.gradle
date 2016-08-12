@@ -1,0 +1,82 @@
+buildscript {
+    repositories { 
+        mavenCentral() 
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+group = 'com.test'
+version  = '0.0.5'
+
+ext {
+    aws_access_key = AWS_ACCESS_KEY != null ? AWS_ACCESS_KEY : System.getenv('AWS_ACCESS_KEY')
+    aws_secret_key = AWS_SECRET_KEY != null ? AWS_SECRET_KEY : System.getenv('AWS_SECRET_KEY')
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url "s3://shs-maven-new/releases"
+        credentials(AwsCredentials) {
+            accessKey aws_access_key
+            secretKey aws_secret_key
+        }
+    }
+    maven {
+        url "s3://shs-maven-new/snapshots"
+        credentials(AwsCredentials) {
+            accessKey aws_access_key
+            secretKey aws_secret_key
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.16.10'
+    compile 'com.test:gradleDemo:0.0.5-SNAPSHOT'
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-amqp')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement.imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR4"
+}
+
+/** include env-specific config files 
+ *  usage: 
+ *       gradle <task> -Penv=[local,dev,prod]
+*/
+processResources.doFirst {
+    def env = (project.hasProperty('env') ? env : 'local').toLowerCase() 
+    from "src/main/config/$env"
+}
+
+wrapper.gradleVersion = '2.14.1'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) { from components.java }
+    }
+
+    repositories {
+        maven {
+            url "s3://shs-maven-new/${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases' }"
+            credentials(AwsCredentials) {
+                accessKey aws_access_key
+                secretKey aws_secret_key
+            }
+        }
+    }
+}

@@ -53,7 +53,7 @@ plugins=(git)
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/usr/local/sbin:/bin:/usr/sbin:/sbin:/Users/jchen9/bin"
+export PATH=".:/usr/local/bin:/usr/bin:/usr/local/sbin:/bin:/usr/sbin:/sbin:~/bin"
 export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -98,15 +98,19 @@ alias tstart="$tomcat/bin/startup.sh"
 alias tstop="$tomcat/bin/shutdown.sh"
 alias mvim="/usr/bin/vi"
 alias kbn="~/Applications/kibana/bin/kibana"
+alias vi=/usr/local/bin/vim
+alias gwcb="gradle clean build"
+alias gwcp="gradle clean publish"
 
 #postgres
 alias cdpg="cd /usr/local/var/postgres"
 alias pgstart="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
 alias pgstop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias pgstatus="pg_ctl -D /usr/local/var/postgres status"
+alias brewski='brew update && brew upgrade --all && brew cleanup; brew doctor'
 
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export PATH=".:$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 #PROMPT='%{$(collapse_pwd|([[ $EUID == 0 ]] && GREP_COLORS="mt=01;31" grep --color=always /|| GREP_COLORS="mt=01;34" grep --color=always /))%${#PWD}G%} %(!.%F{red}.%F{cyan})%n%f@%F{yellow}%m%f%(!.%F{red}.)%#%f '
 
 setopt No_HIST_VERIFY
@@ -116,3 +120,6 @@ function collapse_pwd {
     #echo ${PWD/#$HOME/~}
     echo $(pwd | sed -e "s,^$HOME,~,")
 }
+#export PATH=~/instantclient_11_2:$PATH
+export PG_USER=root
+export PG_PASSWORD=
