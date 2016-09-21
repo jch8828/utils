@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
 
@@ -11,34 +12,20 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'maven-publish'
+apply plugin: 'docker'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-group = 'com.test'
+group = 'test'
 version  = '0.0.5'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14.1'
+}
 
 ext {
     aws_access_key = AWS_ACCESS_KEY != null ? AWS_ACCESS_KEY : System.getenv('AWS_ACCESS_KEY')
     aws_secret_key = AWS_SECRET_KEY != null ? AWS_SECRET_KEY : System.getenv('AWS_SECRET_KEY')
-}
-
-repositories {
-    maven {
-        url "s3://shs-maven-new/releases"
-        credentials(AwsCredentials) {
-            accessKey aws_access_key
-            secretKey aws_secret_key
-        }
-    }
-    maven {
-        url "s3://shs-maven-new/snapshots"
-        credentials(AwsCredentials) {
-            accessKey aws_access_key
-            secretKey aws_secret_key
-        }
-    }
-    mavenLocal()
-    mavenCentral()
 }
 
 dependencies {
@@ -54,16 +41,45 @@ dependencyManagement.imports {
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR4"
 }
 
-/** include env-specific config files 
- *  usage: 
- *       gradle <task> -Penv=[local,dev,prod]
+task buildDocker(type: Docker, dependsOn: build) {
+  push = false
+  applicationName = jar.baseName
+  dockerfile = file('src/main/docker/Dockerfile')
+  doFirst {
+    copy {
+      from jar
+      into stageDir
+    }
+  }
+}
+
+/** 
+ *  include env-specific config files 
+ *  usage: gradle <task> -Penv=[local,dev,prod]
 */
 processResources.doFirst {
     def env = (project.hasProperty('env') ? env : 'local').toLowerCase() 
     from "src/main/config/$env"
 }
 
-wrapper.gradleVersion = '2.14.1'
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url "s3://shs-maven-new/releases"
+        credentials(AwsCredentials) {
+            accessKey aws_access_key
+            secretKey aws_secret_key
+        }
+    }
+    maven {
+        url "s3://shs-maven-new/snapshots"
+        credentials(AwsCredentials) {
+            accessKey aws_access_key
+            secretKey aws_secret_key
+        }
+    }
+}
 
 publishing {
     publications {
