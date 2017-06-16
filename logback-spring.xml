@@ -1,4 +1,5 @@
 <configuration>
+    <jmxConfigurator />
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
     <springProperty scope="context" name="app_name" source="spring.application.name"/>
