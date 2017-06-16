@@ -1,21 +1,34 @@
 <configuration>
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
-    <property name="app_name" value="myApp" />
+    <springProperty scope="context" name="app_name" source="spring.application.name"/>
+    <property name="log_file" value="/var/log/${app_name}/${app_name}.log"/>
+    <springProfile name="!production,!staging">
+        <property name="log_file" value="${BUILD_FOLDER:-build}/${app_name}.log"/>
+        <property name="log_prefix" value="${app_name}-dev" />
+    </springProfile>
+    <springProfile name="production">
+        <property name="pt_host" value="logs4.papertrailapp.com" />
+        <property name="pt_port" value="16456" />
+        <property name="log_prefix" value="${app_name}-pr" />
+    </springProfile>
+    <springProfile name="staging">
+        <property name="pt_host" value="logs4.papertrailapp.com" />
+        <property name="pt_port" value="28814" />
+        <property name="log_prefix" value="${app_name}-st" />
+    </springProfile>
+    <property name="log_pattern" value="${log_prefix}: [%thread] %-5level %logger{40} - %msg%n"/>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/${app_name}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>logs/${app_name}.%i.log.zip</fileNamePattern>
-            <minIndex>1</minIndex>
-            <maxIndex>30</maxIndex>
+        <file>${log_file}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log_file}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
         </rollingPolicy>
 
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>150MB</maxFileSize>
-        </triggeringPolicy>
-        <encoder>e
-            <pattern>%d{MMM dd yyyy HH:mm:ss.SSS, America/Los_Angeles} [%thread %X{X-Request-ID}] %-5level %logger{36} - %msg%n</pattern>
+        <encoder>
+            <pattern>%d{MMM dd yyyy HH:mm:ss.SSS, America/Los_Angeles} ${log_pattern}</pattern>
+            <charset>utf8</charset>
         </encoder>
     </appender>
 
@@ -25,23 +38,18 @@
         <appender-ref ref="FILE" />
     </appender>
 
-    <springProfile name="production,staging">
-        <springProfile name="production">
-            <property name="pt_host" value="logs4.papertrailapp.com" />
-            <property name="pt_port" value="16456" />
-            <property name="log_prefix" value="${app_name}-pr" />
-        </springProfile>
-        <springProfile name="staging">
-            <property name="pt_host" value="logs4.papertrailapp.com" />
-            <property name="pt_port" value="28814" />
-            <property name="log_prefix" value="${app_name}-st" />
-        </springProfile>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{MMM dd yyyy HH:mm:ss.SSS, America/Los_Angeles} ${log_pattern}</pattern>
+        </layout>
+    </appender>
 
+    <springProfile name="production,staging">
         <appender name="PAPERTRAIL" class="ch.qos.logback.classic.net.SyslogAppender">
             <syslogHost>${pt_host}</syslogHost>
             <port>${pt_port}</port>
             <facility>USER</facility>
-            <suffixPattern>${log_prefix}: [%thread %X{Request-Id}] %logger{36} - %msg</suffixPattern>
+            <suffixPattern>${log_prefix}: [%thread] %-5level %logger{36} - %msg</suffixPattern>
         </appender>
 
         <appender name="ASYNC_PAPERTRAIL" class="ch.qos.logback.classic.AsyncAppender">
@@ -51,19 +59,23 @@
         </appender>
     </springProfile>
 
-    <logger name="org.springframework" level="INFO" />
-
-    <logger name="com.searshomeservices" level="INFO" additivity="false">
-        <springProfile name="production">
+    <logger name="com.searshomeservices" level="${log.level:-INFO}" additivity="false">
+        <appender-ref ref="ASYNC_FILE" />
+        <springProfile name="production,staging">
             <appender-ref ref="ASYNC_PAPERTRAIL" />
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <springProfile name="!production,!staging">
+            <appender-ref ref="STDOUT" />
+        </springProfile>
     </logger>
 
     <root level="${log.level:-INFO}">
+        <appender-ref ref="ASYNC_FILE" />
         <springProfile name="staging">
             <appender-ref ref="ASYNC_PAPERTRAIL" />
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <springProfile name="!production,!staging">
+            <appender-ref ref="STDOUT" />
+        </springProfile>
     </root>
 </configuration>
