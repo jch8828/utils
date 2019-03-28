@@ -1,17 +1,26 @@
-# Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/r632622/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="amuse"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
@@ -27,7 +36,7 @@ DISABLE_AUTO_UPDATE="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="false"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -39,40 +48,57 @@ ENABLE_CORRECTION="false"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+  git
+  mvn
+  brew
+  common-aliases
+  docker
+  history
+  jsontools
+  pyenv
+  python
+  sudo
+  encode64
+  kubectl
+  osx
+)
+
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH=".:/usr/local/bin:/usr/bin:/usr/local/sbin:/bin:/usr/sbin:/sbin:~/bin"
-export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
+# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='mvim'
-fi
+# if [[ -n $SSH_CONNECTION ]]; then
+export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -82,44 +108,26 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-tomcat=/usr/local/Cellar/tomcat/default
-alias h=history
-alias cdp="cd /Users/jchen9/Projects/"
-alias cdns="cd /Users/jchen9/ProjectsNS/"
-#alias me="mvn clean eclipse:eclipse"
-alias mp="mvn clean package -Plocal"
-alias mps="mvn clean package -Pstage"
-alias mpp="mvn clean package -Pprod"
-alias mi="mvn clean install -Plocal"
-alias mt="mvn dependency:tree"
-alias cdt="cd $tomcat/webapps"
-alias cdl="cd $tomcat/logs"
-alias tstart="$tomcat/bin/startup.sh"
-alias tstop="$tomcat/bin/shutdown.sh"
-alias mvim="/usr/bin/vi"
-alias kbn="~/Applications/kibana/bin/kibana"
-alias vi=/usr/local/bin/vim
-alias gwcb="gradle clean build"
-alias gwcp="gradle clean publish"
+#alias hg='fc -El 0 | grep'
+alias a='alias'
+alias ag="alias | grep"
+alias cdp="cd ~/Projects"
+alias cddoc="cd ~/Documents"
+alias cddl="cd ~/Downloads"
+alias c=code
+alias vi=vim
+alias ksconfig='aws-adfs login --adfs-host aws-sso.cambiahealth.com --profile default --region us-west-2 --role-arn arn:aws:iam::647507038414:role/chp-developer-sit && aws eks update-kubeconfig --name chp-eks-v04-master-sit && kubectl config set-context $(kubectl config current-context) --namespace=chp-aie'
+alias kdconfig='aws-adfs login --adfs-host aws-sso.cambiahealth.com --profile default --region us-west-2 --role-arn arn:aws:iam::767457873974:role/chp-developer-dev && aws eks update-kubeconfig --name chp-eks-v04-master-dev && kubectl config set-context $(kubectl config current-context) --namespace=chp-aie'
+alias vst='vsplit_tab'
+alias st='split_tab'
+alias vimrc='${=EDITOR} ~/.vimrc'
 
-#postgres
-alias cdpg="cd /usr/local/var/postgres"
-alias pgstart="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
-alias pgstop="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
-alias pgstatus="pg_ctl -D /usr/local/var/postgres status"
-alias brewski='brew update && brew upgrade --all && brew cleanup; brew doctor'
-
-
-export PATH=".:$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
-#PROMPT='%{$(collapse_pwd|([[ $EUID == 0 ]] && GREP_COLORS="mt=01;31" grep --color=always /|| GREP_COLORS="mt=01;34" grep --color=always /))%${#PWD}G%} %(!.%F{red}.%F{cyan})%n%f@%F{yellow}%m%f%(!.%F{red}.)%#%f '
-
-setopt No_HIST_VERIFY
 set -o vi
-
-function collapse_pwd {
-    #echo ${PWD/#$HOME/~}
-    echo $(pwd | sed -e "s,^$HOME,~,")
-}
-#export PATH=~/instantclient_11_2:$PATH
-export PG_USER=root
-export PG_PASSWORD=
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+eval "$(pyenv virtualenv-init -)"
+export PATH=$HOME/bin:$PATH
+source $HOME/.autoproxy
