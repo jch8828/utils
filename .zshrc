@@ -123,11 +123,4 @@ alias st='split_tab'
 alias vimrc='${=EDITOR} ~/.vimrc'
 
 set -o vi
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
-eval "$(pyenv virtualenv-init -)"
 export PATH=$HOME/bin:$PATH
-source $HOME/.autoproxy
