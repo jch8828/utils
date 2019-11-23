@@ -2,12 +2,12 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="~/.oh-my-zsh"
+export ZSH="/home/daddy/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="amuse"
 
 # Set list of themes to pick from when loading at random
@@ -24,10 +24,16 @@ ZSH_THEME="amuse"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -89,7 +95,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-export EDITOR='vim'
+#   export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
 # fi
@@ -97,30 +103,18 @@ export EDITOR='vim'
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
+alias zshrc="vi ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-#alias hg='fc -El 0 | grep'
-alias a='alias'
-alias ag="alias | grep"
-alias cdp="cd ~/Projects"
-alias cddoc="cd ~/Documents"
-alias cddl="cd ~/Downloads"
-alias c=code
-alias vi=vim
-alias ksconfig='aws-adfs login --adfs-host aws-sso.cambiahealth.com --profile default --region us-west-2 --role-arn arn:aws:iam::647507038414:role/chp-developer-sit && aws eks update-kubeconfig --name chp-eks-v04-master-sit && kubectl config set-context $(kubectl config current-context) --namespace=chp-aie'
-alias kdconfig='aws-adfs login --adfs-host aws-sso.cambiahealth.com --profile default --region us-west-2 --role-arn arn:aws:iam::767457873974:role/chp-developer-dev && aws eks update-kubeconfig --name chp-eks-v04-master-dev && kubectl config set-context $(kubectl config current-context) --namespace=chp-aie'
-alias vst='vsplit_tab'
-alias st='split_tab'
-alias vimrc='${=EDITOR} ~/.vimrc'
-
-set -o vi
-export PATH=$HOME/bin:$PATH
+alias n=nordvpn
+alias ns='nordvpn status'
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
