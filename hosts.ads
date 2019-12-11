@@ -1,3 +1,12 @@
+127.0.0.1	localhost
+127.0.1.1	daddy-pc
+# The following lines are desirable for IPv6 capable hosts
+::1	localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
 #=====================================
 # Hosts contributed by Steven Black
 # http://stevenblack.com
@@ -218,8 +227,6 @@
 0.0.0.0 c.webengage.com
 0.0.0.0 prebid.adnxs.com
 0.0.0.0 www.prebid.adnxs.com
-0.0.0.0 gurgle.zdbb.net
-0.0.0.0 ns.zdbb.net
 0.0.0.0 284419414.log.optimizely.com
 0.0.0.0 www.284419414.log.optimizely.com
 0.0.0.0 mt.rtmark.net
@@ -1245,32 +1252,17 @@
 0.0.0.0 trace.svc.ui.com
 
 0.0.0.0 smartlock.google.com
-
-
-127.0.0.1	localhost
-127.0.1.1	daddy-desktop
 0.0.0.0 google-analytics.com
 0.0.0.0 www.google-analytics.com
 0.0.0.0 ssl.google-analytics.com
 0.0.0.0 analytics.google.com
-0.0.0.0 gstatic.com
-0.0.0.0 fonts.gstatic.com
 0.0.0.0 fonts.googleapis.com
 0.0.0.0 googleapis.com
-0.0.0.0 www.gstatic.com
 0.0.0.0 ssl.p.jwpcdn.com
-0.0.0.0 s.yimg.com
-0.0.0.0 s.ytimg.com
 0.0.0.0 s.aolcdn.com
 0.0.0.0 o.aolcdn.com
-
-
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+0.0.0.0 yt3.ggpht.com
+0.0.0.0 www.ggpht.com
 
 ### WindowsSpyBlocker: 
 # https://raw.githubusercontent.com/FadeMind/hosts.extras/master/WindowsSpyBlocker-UPDATE/hosts
@@ -1774,4 +1766,3 @@ ff02::2 ip6-allrouters
 0.0.0.0 v4.download.windowsupdate.com
 0.0.0.0 windowsupdate.com
 0.0.0.0 www.download.windowsupdate.com
-
